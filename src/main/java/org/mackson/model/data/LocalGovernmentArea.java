@@ -1,0 +1,30 @@
+package org.mackson.model.data;
+
+public enum LocalGovernmentArea {
+    ANIOCHA_NORTH,
+    ANIOCHA_SOUTH,
+    BOMADI,
+    BURUTU,
+    ETHIOPE_EAST,
+    ETHIOPE_WEST,
+    IKA_NORTH_EAST,
+    IKA_SOUTH,
+    ISOKO_NORTH,
+    ISOKO_SOUTH,
+    NDOKWA_EAST,
+    NDOKWA_WEST,
+    OKPE,
+    OSHIMILI_NORTH,
+    OSHIMILI_SOUTH,
+    PATANI,
+    SAPELE,
+    UDU,
+    UGHELLI_NORTH,
+    UGHELLI_SOUTH,
+    UKWUANI,
+    UVWIE,
+    WARRI_CENTRAL,
+    WARRI_NORTH,
+    WARRI_SOUTH,
+    WARRI_SOUTH_WEST
+}
