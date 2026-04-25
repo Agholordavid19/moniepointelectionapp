@@ -14,6 +14,7 @@ import org.mackson.model.dtos.citizendto.updatecitizen.CitizenUpdateValidated;
 import org.mackson.model.dtos.citizendto.updatecitizen.CitizenUpdatedResponse;
 import org.mackson.model.entity.Citizen;
 import org.mackson.repository.CitizenRepository;
+import org.mackson.service.CitizenServiceInterface;
 import org.mackson.service.utils.CitizenInputValidator;
 import org.mackson.service.utils.MapperTool;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class CitizenService {
+public class CitizenService implements CitizenServiceInterface {
     private final CitizenInputValidator citizenInputValidator;
     private final CitizenRepository citizenRepository;
     private final MapperTool mapper;

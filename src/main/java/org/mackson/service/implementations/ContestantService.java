@@ -9,13 +9,14 @@ import org.mackson.model.dtos.contestant.ContestantVoterResponse;
 import org.mackson.model.entity.Citizen;
 import org.mackson.model.entity.Contestant;
 import org.mackson.repository.ContestantRepository;
+import org.mackson.service.ContestantServiceInterface;
 import org.mackson.service.utils.ContestantValidator;
 import org.mackson.service.utils.MapperTool;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ContestantService {
+public class ContestantService implements ContestantServiceInterface {
     private final CitizenService citizenService;
     private final ContestantRepository contestantRepository;
     private final ContestantValidator contestantValidator;
