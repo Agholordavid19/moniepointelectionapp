@@ -1,4 +1,4 @@
-package org.mackson.model.dtos.signup;
+package org.mackson.model.dtos.citizendto.signup;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
