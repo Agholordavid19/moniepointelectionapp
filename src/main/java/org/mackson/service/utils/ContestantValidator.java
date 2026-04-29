@@ -5,7 +5,9 @@ import org.mackson.model.data.ElectionPosition;
 import org.mackson.model.data.PolitcalParties;
 import org.mackson.model.dtos.contestant.ContestantValidated;
 import org.mackson.model.dtos.contestant.ContestantRequest;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ContestantValidator {
     public ContestantValidated validateContesantInput(ContestantRequest newContestant) {
         PolitcalParties contestantParty = validateContestantParty(newContestant.getParty());

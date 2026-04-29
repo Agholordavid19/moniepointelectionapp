@@ -14,7 +14,9 @@ import java.time.Instant;
 @NoArgsConstructor
 @Builder
 public class ContestantResponse {
+    private String name;
     private String party;
     private String position;
     private Instant reisteredAt;
+    private String email;
 }

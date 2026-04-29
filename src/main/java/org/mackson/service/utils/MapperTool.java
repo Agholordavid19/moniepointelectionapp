@@ -2,6 +2,7 @@ package org.mackson.service.utils;
 
 import org.mackson.model.data.LocalGovernmentArea;
 import org.mackson.model.dtos.citizendto.updatecitizen.CitizenRequestValidated;
+import org.mackson.model.dtos.contestant.ContestantResponse;
 import org.mackson.model.dtos.contestant.ContestantValidated;
 import org.mackson.model.dtos.citizendto.login.CitizenLoginRequest;
 import org.mackson.model.dtos.citizendto.signup.CitizenResponse;
@@ -10,6 +11,7 @@ import org.mackson.model.entity.Contestant;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.util.List;
 
 @Component
 public class MapperTool {
@@ -58,8 +60,9 @@ public class MapperTool {
                 .build();
     }
 
-    public Contestant mapToContestant(ContestantValidated contestantValidated, String email) {
+    public Contestant mapToContestant(ContestantValidated contestantValidated, String email, String name) {
         Contestant newContestant = new Contestant();
+        newContestant.setName(name);
         newContestant.setContestant(true);
         newContestant.setParty(contestantValidated.getParty());
         newContestant.setPosition(contestantValidated.getPosition());
@@ -69,10 +72,24 @@ public class MapperTool {
         return newContestant;
     }
 
-    public Contestant updateContestant(ContestantValidated contestantValidated, Contestant foundContestant) {
+    public Contestant updateContestant(ContestantValidated contestantValidated, Contestant foundContestant, String name) {
         foundContestant.setParty(contestantValidated.getParty());
         foundContestant.setPosition(contestantValidated.getPosition());
         foundContestant.setUpdatedAt(Instant.now());
+        foundContestant.setName(name);
         return foundContestant;
+    }
+    public List<ContestantResponse> mapToListContestantPositions(List<Contestant> contestantsPositions) {
+        return contestantsPositions.stream()
+                .map(this::mapToContestantResponse)
+                .toList();
+    }
+    private ContestantResponse mapToContestantResponse(Contestant contestant) {
+        return ContestantResponse.builder()
+                .name(contestant.getName())
+                .party(contestant.getParty().name())
+                .reisteredAt(contestant.getReisteredAt())
+                .position(contestant.getPosition().name())
+                .build();
     }
 }

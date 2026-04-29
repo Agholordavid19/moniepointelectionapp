@@ -19,6 +19,7 @@ import org.mackson.service.utils.CitizenInputValidator;
 import org.mackson.service.utils.MapperTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -31,6 +32,7 @@ public class CitizenService implements CitizenServiceInterface {
     private final CitizenRepository citizenRepository;
     private final MapperTool mapper;
 
+    @Transactional
     public CitizenResponse createCitizenThenSave(CitizenRequest citizenRequest) {
         CitizenRequestValidated validated = citizenInputValidator.checkAllInputandValidate(citizenRequest);
         if(citizenRepository.existsByEmail(validated.getEmail())) throw new EmailExistsAlreadyException("This Email Exists Already " + validated.getEmail());
@@ -41,7 +43,7 @@ public class CitizenService implements CitizenServiceInterface {
     }
 
     public CitizenLoginResponse logUserWithEmailAndPassword(CitizenLoginRequest citizenLoginRequest) {
-        Citizen foundCitizen = citizenRepository.findByEmailOrPhoneNumber(citizenLoginRequest.getEmail()).orElseThrow(() -> new InvalidEmailException("Invalid user"));
+        Citizen foundCitizen = citizenRepository.findByEmail(citizenLoginRequest.getEmail()).orElseThrow(() -> new InvalidEmailException("Invalid user"));
         if (!foundCitizen.getPassword().equals(citizenLoginRequest.getPassword())) throw new InvalidInputException("wrong password");
         foundCitizen.setLoggedIn(true);
         citizenRepository.save(foundCitizen);
@@ -117,7 +119,7 @@ public class CitizenService implements CitizenServiceInterface {
     }
 
     public Citizen verifyCitizenLogStatus(String email) {
-        Citizen foundCitizen = citizenRepository.findByEmailOrPhoneNumber(email).orElseThrow(() -> new InvalidEmailException("Email does not exists"));
+        Citizen foundCitizen = citizenRepository.findByEmail(email).orElseThrow(() -> new InvalidEmailException("Email does not exists"));
         if (!foundCitizen.isLoggedIn()) throw new NotAuthenticatedActionException("You are not logged in");
         return foundCitizen;
     }

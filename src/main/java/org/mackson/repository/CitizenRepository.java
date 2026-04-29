@@ -10,7 +10,7 @@ public interface CitizenRepository extends MongoRepository<Citizen, String> {
 
     boolean existsByEmail(String email);
 
-    Optional<Citizen> findByEmailOrPhoneNumber(String phoneNumber);
+    Optional<Citizen> findByEmail(String phoneNumber);
 
     boolean existsByVotingId(String votingId);
 }

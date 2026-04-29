@@ -20,6 +20,7 @@ import java.time.Instant;
 public class Contestant {
     @Id
     private String id;
+    private String name;
     private PolitcalParties party;
     private ElectionPosition position;
     private Integer numberOfVotes;
