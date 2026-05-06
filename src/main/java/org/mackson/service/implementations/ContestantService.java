@@ -5,6 +5,7 @@ import org.mackson.exceptions.ContestantExistAlreadyException;
 import org.mackson.exceptions.InvalidEmailException;
 import org.mackson.exceptions.InvalidInputException;
 import org.mackson.model.data.ElectionPosition;
+import org.mackson.model.dtos.WinnerResponse;
 import org.mackson.model.dtos.contestant.ContestantResponse;
 import org.mackson.model.dtos.contestant.ContestantValidated;
 import org.mackson.model.dtos.contestant.ContestantRequest;
@@ -17,7 +18,9 @@ import org.mackson.service.utils.ContestantValidator;
 import org.mackson.service.utils.MapperTool;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 
 @Service
@@ -91,6 +94,22 @@ public class ContestantService implements ContestantServiceInterface {
                     .position(found.getPosition().name())
                     .reisteredAt(found.getReisteredAt())
                     .build();
+    }
+
+    @Override
+    public List<WinnerResponse> getWinners() {
+        return Arrays.stream(ElectionPosition.values())
+                .map(position -> contestantRepository
+                        .findTopByPositionOrderByNumberOfVotesDesc(position)
+                        .map(c -> WinnerResponse.builder()
+                                .position(position.name())
+                                .name(c.getName())
+                                .party(c.getParty().name())
+                                .votes(c.getNumberOfVotes())
+                                .build())
+                        .orElse(null))
+                .filter(Objects::nonNull)
+                .toList();
     }
 
     private ElectionPosition parsePosition(String position) {

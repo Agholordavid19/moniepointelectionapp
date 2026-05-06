@@ -107,7 +107,7 @@ public class CitizenServiceTest {
     @Test
     @DisplayName("log citizen in")
     void citizenLogsIn_ComparePasswordAndEmailTest(){
-        when(citizenRepository.findByEmailOrPhoneNumber(citizenLoginRequest.getEmail())).thenReturn(Optional.ofNullable(savedCitizen));
+        when(citizenRepository.findByEmail(citizenLoginRequest.getEmail())).thenReturn(Optional.ofNullable(savedCitizen));
         when(citizenRepository.save(any(Citizen.class))).thenReturn(savedCitizen);
        CitizenLoginResponse response = citizenService.logUserWithEmailAndPassword(citizenLoginRequest);
        assertThat(response.getEmail()).isEqualTo(citizenLoginRequest.getEmail());
@@ -119,7 +119,7 @@ public class CitizenServiceTest {
     @DisplayName("update citizen")
     void updateCitizen_thenSave(){
         String email = "john.doe@example.com";
-        when(citizenRepository.findByEmailOrPhoneNumber(email)).thenReturn(Optional.ofNullable(savedCitizen));
+        when(citizenRepository.findByEmail(email)).thenReturn(Optional.ofNullable(savedCitizen));
         when(citizenRepository.save(savedCitizen)).thenReturn(savedCitizen);
         CitizenUpdatedResponse response = citizenService.updateCitizenDetails(updateRequest, email);
         assertNotNull(response);
@@ -130,7 +130,7 @@ public class CitizenServiceTest {
     @DisplayName("")
     void generateCitizen_votingId(){
         String email = "john.doe@example.com";
-        when(citizenRepository.findByEmailOrPhoneNumber(email)).thenReturn(Optional.ofNullable(savedCitizen));
+        when(citizenRepository.findByEmail(email)).thenReturn(Optional.ofNullable(savedCitizen));
         when(citizenRepository.save(any(Citizen.class))).thenReturn(savedCitizen);
         when(citizenRepository.existsByVotingId(any(String.class))).thenReturn(false);
        VotingIdDetails votingIdDetails = citizenService.validateUserThenGenerateVotingId(email);
@@ -141,7 +141,7 @@ public class CitizenServiceTest {
     @DisplayName("Log out")
     void LogUserOut(){
         String email = "agholordavid1@gmail.com";
-        when(citizenRepository.findByEmailOrPhoneNumber(email)).thenReturn(Optional.ofNullable(savedCitizen));
+        when(citizenRepository.findByEmail(email)).thenReturn(Optional.ofNullable(savedCitizen));
         when(citizenRepository.save(any(Citizen.class))).thenReturn(savedCitizen);
         citizenService.logCitizenOut(email);
         assertThat(savedCitizen.isLoggedIn()).isFalse();
@@ -248,7 +248,7 @@ public class CitizenServiceTest {
     @Test
     @DisplayName("login fails - email not found")
     void citizenLogin_emailNotFound_throwsException() {
-        when(citizenRepository.findByEmailOrPhoneNumber(citizenLoginRequest.getEmail()))
+        when(citizenRepository.findByEmail(citizenLoginRequest.getEmail()))
                 .thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> citizenService.logUserWithEmailAndPassword(citizenLoginRequest))
@@ -262,7 +262,7 @@ public class CitizenServiceTest {
     @DisplayName("login fails - wrong password")
     void citizenLogin_wrongPassword_throwsException() {
         citizenLoginRequest.setPassword("wrongpassword");
-        when(citizenRepository.findByEmailOrPhoneNumber(citizenLoginRequest.getEmail()))
+        when(citizenRepository.findByEmail(citizenLoginRequest.getEmail()))
                 .thenReturn(Optional.of(savedCitizen));
 
         assertThatThrownBy(() -> citizenService.logUserWithEmailAndPassword(citizenLoginRequest))
@@ -278,7 +278,7 @@ public class CitizenServiceTest {
         savedCitizen.setLoggedIn(false);
         String email = "john.doe@example.com";
 
-        when(citizenRepository.findByEmailOrPhoneNumber(email))
+        when(citizenRepository.findByEmail(email))
                 .thenReturn(Optional.of(savedCitizen));
 
         assertThatThrownBy(() -> citizenService.updateCitizenDetails(updateRequest, email))
@@ -293,7 +293,7 @@ public class CitizenServiceTest {
     void updateCitizen_emailNotFound_throwsException() {
         String email = "ghost@example.com";
 
-        when(citizenRepository.findByEmailOrPhoneNumber(email))
+        when(citizenRepository.findByEmail(email))
                 .thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> citizenService.updateCitizenDetails(updateRequest, email))
@@ -309,7 +309,7 @@ public class CitizenServiceTest {
         String email = "john.doe@example.com";
         updateRequest.setLocalGovernment("FAKE_LGA");
 
-        when(citizenRepository.findByEmailOrPhoneNumber(email))
+        when(citizenRepository.findByEmail(email))
                 .thenReturn(Optional.of(savedCitizen));
 
         assertThatThrownBy(() -> citizenService.updateCitizenDetails(updateRequest, email))
@@ -325,7 +325,7 @@ public class CitizenServiceTest {
         String email = "john.doe@example.com";
         updateRequest.setPhoneNumber("08012345678"); // missing +234 prefix
 
-        when(citizenRepository.findByEmailOrPhoneNumber(email))
+        when(citizenRepository.findByEmail(email))
                 .thenReturn(Optional.of(savedCitizen));
 
         assertThatThrownBy(() -> citizenService.updateCitizenDetails(updateRequest, email))
@@ -340,7 +340,7 @@ public class CitizenServiceTest {
         savedCitizen.setLoggedIn(false);
         String email = "john.doe@example.com";
 
-        when(citizenRepository.findByEmailOrPhoneNumber(email))
+        when(citizenRepository.findByEmail(email))
                 .thenReturn(Optional.of(savedCitizen));
 
         assertThatThrownBy(() -> citizenService.validateUserThenGenerateVotingId(email))
@@ -356,7 +356,7 @@ public class CitizenServiceTest {
         savedCitizen.setYearOfBirth(2015); // too young
         String email = "john.doe@example.com";
 
-        when(citizenRepository.findByEmailOrPhoneNumber(email))
+        when(citizenRepository.findByEmail(email))
                 .thenReturn(Optional.of(savedCitizen));
 
         assertThatThrownBy(() -> citizenService.validateUserThenGenerateVotingId(email))
@@ -373,7 +373,7 @@ public class CitizenServiceTest {
         savedCitizen.setYearOfBirth(1990);
         String email = "john.doe@example.com";
 
-        when(citizenRepository.findByEmailOrPhoneNumber(email))
+        when(citizenRepository.findByEmail(email))
                 .thenReturn(Optional.of(savedCitizen));
 
         VotingIdDetails result = citizenService.validateUserThenGenerateVotingId(email);
@@ -387,7 +387,7 @@ public class CitizenServiceTest {
     void logOut_emailNotFound_throwsException() {
         String email = "ghost@example.com";
 
-        when(citizenRepository.findByEmailOrPhoneNumber(email))
+        when(citizenRepository.findByEmail(email))
                 .thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> citizenService.logCitizenOut(email))
@@ -403,7 +403,7 @@ public class CitizenServiceTest {
         savedCitizen.setLoggedIn(false);
         String email = "john.doe@example.com";
 
-        when(citizenRepository.findByEmailOrPhoneNumber(email))
+        when(citizenRepository.findByEmail(email))
                 .thenReturn(Optional.of(savedCitizen));
 
         assertThatThrownBy(() -> citizenService.logCitizenOut(email))
